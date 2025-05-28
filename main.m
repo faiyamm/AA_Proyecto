@@ -8,8 +8,8 @@ clc; clear; close all;
 [colores_dominantes, histogramas, indices_orden] = color_dominante(imagenes_procesadas);
 
 % crear un grafo de similitud entre las imágenes
-umbral_similitud = 0.15; % se puede ajustar
-[grupos, matriz_adyacencia] = grafo_similitud(colores_dominantes, umbral_similitud);
+umbral_similitud = 0.1; % se puede ajustar
+[grupos, matriz_adyacencia] = grafo_similitud(colores_dominantes, umbral_similitud, imagenes_procesadas);
 
 %optimizar con histogramas acumulativos
 [colores_optimizados, hist_acumulativos] = optimizacion(imagenes_procesadas, histogramas);

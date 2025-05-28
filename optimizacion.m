@@ -3,7 +3,10 @@ function [colores_optimizados, hist_acumulativos] = optimizacion(imagenes_proces
 
 num_imagenes = length(imagenes_procesadas);
 colores_optimizados = zeros(num_imagenes, 1);
+
 hist_acumulativos = containers.Map('KeyType', 'char', 'ValueType', 'any');
+% crear un histograma acumulativo global
+hist_acumulativo_global = zeros(size(histogramas{1}));
 umbral_similitud = 0.9; % para considerar histogramas similares
 
 for i = 1:num_imagenes
@@ -20,6 +23,8 @@ for i = 1:num_imagenes
             [~, idx] = max(hist_almacenado);
             colores_optimizados(i) = (idx-1)/length(histogramas{i});
             encontrado = true;
+            % Acumular histograma en el global
+            hist_acumulativo_global = hist_acumulativo_global + histogramas{i};
             break;
         end
     end
@@ -31,11 +36,17 @@ for i = 1:num_imagenes
         clave = ['hist_' num2str(i)];
         hist_acumulativos(clave) = hist_nuevo;
         
+        % Acumular en el histograma global
+        hist_acumulativo_global = hist_acumulativo_global + hist_nuevo;
+        
         % determinar color dominante
         [~, idx] = max(hist_nuevo);
         colores_optimizados(i) = (idx-1)/length(hist_nuevo);
     end
 end
+
+% almacenar el histograma acumulativo global
+hist_acumulativos('acumulativo_global') = hist_acumulativo_global;
 
 disp('Optimización con histogramas acumulativos completada.');
 end

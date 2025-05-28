@@ -7,13 +7,19 @@ histogramas = cell(num_imagenes, 1);
 num_bins = 64; % número de divisiones para el histograma
 
 for i = 1:num_imagenes
-    % extraer componente Hue
+    % extraer componente hue
     hue = imagenes_procesadas{i}(:,:,1);
     
     % calcular histograma
     histograma = histcounts(hue(:), linspace(0, 1, num_bins+1));
     histogramas{i} = histograma;
-
+    %
+    figure;
+    bar(linspace(0, 1, num_bins), histograma, 'FaceColor', 'm');
+    title(sprintf('Histograma de Hue - Imagen %d', i));
+    xlabel('Valor Hue (0 a 1)');
+    ylabel('Frecuencia');
+    %
     if max(histograma) == histograma(1) && sum(histograma > 0) < 3
         colores_dominantes(i) = NaN;
     else
